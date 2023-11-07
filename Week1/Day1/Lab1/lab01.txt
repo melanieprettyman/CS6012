@@ -1,0 +1,46 @@
+﻿Lab 1 Questions:
+
+
+
+
+1. Where is the assertEquals method defined? What does it do? Can we use assertEquals for more than just int types? (Hint: Consult the API for JUnit)
+
+Used in JUnit testing frameworks to compare expected and actual values. It checks if two values are equal and, if not, throws an assertion error. The assertEquals method is overloaded, meaning it can handle various types of data, including primitive types, objects, and arrays.
+
+
+   2. Briefly describe what each of the three tests is checking.
+emptyArray() Test  checks the findSmallestDiff method when provided an empty array (arr1). It expects the method to return -1, which matches the condition when the input array has fewer than two elements. allArrayElementsEqual() Test verifies the behavior of the findSmallestDiff method when the input array (arr2) contains the same elements. It expects the method to return 0, as all elements are the same, and the difference between any two elements is 0.
+smallRandomArrayElements() test evaluates the findSmallestDiff method with an array containing different values (arr3). It expects the method to calculate and return the smallest absolute difference between any two elements, which is 4 in this case. The expected value is 4, as it is the smallest difference among all the pairs of elements in the array.
+
+
+   3. Why is our unimplemented findSmallestDiff method passing one of the tests?
+The stub method returned 0 and ‘allArrayElementsEqual’ needed to return 0. 
+
+
+   4. Why are we failing the third test? How should our method be modified to correct this?
+We are failing the third test because arr3 contains negatives and our findSmallDiff method doesn’t account for negatives. To fix this the value of diff should be the absolute value (diff = Math.abs([0]-[1]). 
+
+
+      5. What is the appropriate call to assertEquals for your new test (test 4)?
+assertEquals(0, DiffUtil.findSmallestDiff(arr4));
+assertEquals method checks whether the result from DiffUtil.findSmallestDiff(arr4) matches the expected value. In this case, the expected value is 0, indicating that the method is expected to return 0 when provided an array of 100 elements where all elements are the same (arr4).
+
+
+      6. Provide one more test (test 5) for the findSmallestDiff method. Briefly describe your test and write the call to assertEquals here.
+        // Test an array with only positive values
+public void allPositiveArrayElements() {
+    int[] positiveArray = {5, 10, 15, 20, 25};
+    assertEquals(5, DiffUtil.findSmallestDiff(positiveArray));
+}
+This test checks an array of positive values to verify if the findSmallestDiff method correctly identifies the smallest difference between elements. In this case, it's expected to return 5 as the smallest difference among the elements in the array.
+
+
+      7. Briefly describe your unit tests for Assignment 1.
+
+
+      1. getPixel Boundary Cases Test: Verifies the behavior of getPixel at the boundaries of the image.
+      2. Average Brightness Tests:Tests the averageBrightness method on images with specific color values (white image).
+      3. Normalized Image Tests:Verifies the normalization process, testing on very small and large images to ensure correct behavior and performance.
+      4. Mirroring Images Test:Checks if mirroring an image twice results in the original image.
+      5. Cropped Image Tests:Tests the cropped method for valid and invalid (out-of-bounds) cropped regions.
+      6. Squarified Image Tests:Evaluates squarification for both square and non-square images, verifying the output squarified image's dimensions.
