@@ -2,21 +2,14 @@ package assignment02;
 
 import java.util.GregorianCalendar;
 
-public class LibraryBook extends Book{
-    String holder;
+public class LibraryBookGeneric<T> extends Book{
+    T  holder;
     // Create a GregorianCalendar instance
     GregorianCalendar dueDate = new GregorianCalendar();
 
-    // Set the due date values
-    int year = 2022;
-    int month = 11; // Note: months are zero-based (0 - 11)
-    int day = 30;
-    int hour = 23;
-    int minute = 59;
-    int second = 59;
 
 
-    public LibraryBook(long isbn, String author, String title) {
+    public LibraryBookGeneric(long isbn, String author, String title) {
         super(isbn, author, title);
     }
 
@@ -28,19 +21,19 @@ public class LibraryBook extends Book{
 
 
     //CHECK BOOK OUT
-    public void checkOut(String holder, int year, int month, int day) {
+    public void checkOut(T holder, int year, int month, int day) {
         this.holder = holder;
         this.dueDate = new GregorianCalendar(year, month -1, day);
     }
 
     //HELPER FUNCTIONS
-    public String getHolder(){
-        return holder;
+    public <T> T getHolder(){
+        return (T) holder;
     }
     public GregorianCalendar getDueDate(){
         return dueDate;
     }
-    public void setHolder(String holder) {
+    public void setHolder(T holder) {
         this.holder = holder;
     }
 

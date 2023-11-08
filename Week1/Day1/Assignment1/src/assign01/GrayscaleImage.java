@@ -99,10 +99,6 @@ public class GrayscaleImage {
 
     @Override
     public boolean equals(Object other) {
-        // Check if the compared object is the same instance
-        if (this == other) {
-            return true;
-        }
 
         // Check if the compared object is null or not an instance of GrayscaleImage
         if (other == null || !(other instanceof GrayscaleImage)) {
@@ -113,15 +109,15 @@ public class GrayscaleImage {
         GrayscaleImage otherImage = (GrayscaleImage) other;
 
         // Check if the dimensions of the images are not the same
-        if (imageData.length != otherImage.imageData.length || imageData[0].length != otherImage.imageData[0].length) {
+        if (this.imageData.length != otherImage.imageData.length || this.imageData[0].length != otherImage.imageData[0].length) {
             return false;
         }
 
         // Check the pixel values of both images
-        for (int row = 0; row < imageData.length; row++) {
-            for (int col = 0; col < imageData[0].length; col++) {
+        for (var row = 0; row < imageData.length; row++) {
+            for (var col = 0; col < imageData[0].length; col++) {
                 // Compare the corresponding pixels of both images
-                if (getPixel(row, col) != otherImage.getPixel(row, col)) {
+                if (getPixel(row, col) != otherImage.getPixel(col, row)) {
                     return false;
                 }
             }
@@ -179,16 +175,17 @@ public class GrayscaleImage {
 
 
     public GrayscaleImage mirrored(){
-        GrayscaleImage mirrorImage = new GrayscaleImage(this.imageData);
+        double[][] picSize = new double[this.imageData.length][this.imageData[0].length];
 
         //Loop over the rows and columns in the image
         for (var row = 0; row < this.imageData.length; row++) {
             for (var col = 0; col < this.imageData[row].length; col++) {
                 //set mirrorImage pixel to the reversed order by getting the total number of columns in the original image
                 //and subtracting with col, takes the column from the last index and moving towards the beginning.
-                mirrorImage.imageData[row][col] = (this.imageData[row][imageData[0].length - 1 - col]);
+                picSize[row][col] = (this.imageData[row][imageData[0].length - 1 - col]);
             }
         }
+        GrayscaleImage mirrorImage = new GrayscaleImage(picSize);
 
         return mirrorImage;
     }
@@ -196,7 +193,7 @@ public class GrayscaleImage {
 
     public GrayscaleImage cropped(int startRow, int startCol, int width, int height) throws IllegalArgumentException{
         // Check if width or height is less than or equal to zero
-        if (width <= 0 || height <= 0 || width > imageData.length || height > imageData[0].length) {
+        if (startCol<0 || startRow<0 || width < 0 || height < 0 || startRow + height > this.imageData.length || startCol + width > this.imageData[0].length) {
             throw new IllegalArgumentException("Cropping goes outside the bounds of the original image.");
         }
 
