@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LibraryTest {
 
@@ -85,6 +86,7 @@ class LibraryTest {
         String patron1 = "Jane Doe";
 
         assertTrue(lib.checkout(9780330351690L, patron1, 1, 1, 2008));
+
         assertTrue(lib.checkout(9780374292799L, patron1, 1, 1, 2008));
 
         var booksCheckedOut1 = lib.lookup(patron1);
@@ -125,6 +127,74 @@ class LibraryTest {
 
         assertTrue(lib.checkin(patron2));
 
+
     }
 
+    @Test
+    public void testOverDueBookList() {
+        // test a medium library
+        var lib = new LibraryGeneric();
+        lib.addAll("Mushroom_Publishing.txt");
+
+        //Have someone check out a books
+        var checkout1 = lib.checkout(9781843190042L, "Jane Doe", 1, 1, 2008);
+        var checkout2 = lib.checkout(9781843190073L, "Jane Doe", 1, 1, 2008);
+        var checkout3 = lib.checkout(9781843190110L, "Jane Doe", 1, 1, 2008);
+        var checkout4 = lib.checkout(9781843190349L, "Jane Doe", 1, 1, 2024);
+        var checkout5 = lib.checkout(9781843190363L, "Jane Doe", 1, 1, 2024);
+
+        //create overdue list
+        ArrayList<LibraryBookGeneric> overdueList = lib.getOverdueList(11,1,2022);
+        //There are 3 overdue books, assert that the size of the list is 3
+        assertEquals(overdueList.size(), 3);
+
+    }
+
+    @Test
+    public void testInventory() {
+        // make a library
+        var lib = new LibraryGeneric();
+        lib.add(1000, "Thomas L. Friedman", "The World is Flat");
+        lib.add(1001, "Jon Krakauer", "Into the Wild");
+        lib.add(1002, "David Baldacci", "Simple Genius");
+        //create sorted ISBN list
+        ArrayList<LibraryBookGeneric> sortByISBN = lib.getInventoryList();
+        //Assert the first ISBN in the list is 1000
+        assertEquals(sortByISBN.get(0).getIsbn(), 1000);
+
+
+    }
+
+    @Test
+    public void testOrderByAuthor() {
+        // make a library
+        var lib = new LibraryGeneric();
+        lib.add(1000, "Thomas L. Friedman", "The World is Flat");
+        lib.add(1001, "Jon Krakauer", "Into the Wild");
+        lib.add(1002, "David Baldacci", "Simple Genius");
+        //create sorted author list
+        ArrayList<LibraryBookGeneric> sortByAuthor = lib.getOrderedByAuthor();
+        //First author is David, assert the first author in the list is David
+        assertEquals(sortByAuthor.get(0).getAuthor(), "David Baldacci");
+
+        //CASE; SAME AUTHOR, DIFF BOOKS
+        //Add book with the same author but Title is alphabetically first
+        lib.add(1003, "David Baldacci", "Evil Genius");
+        ArrayList<LibraryBookGeneric> sortByAuthor2 = lib.getOrderedByAuthor();
+        //First book in the list should be "Evil Genius" assert this is true
+         assertEquals(sortByAuthor2.get(0).getTitle(), "Evil Genius");
+
+         //CASE; DUPLICATE BOOKS
+        //Add a repeat book to library
+        lib.add(1004, "David Baldacci", "Evil Genius");
+        ArrayList<LibraryBookGeneric> sortByAuthor3 = lib.getOrderedByAuthor();
+        //list should be "Evil Genius", "Evil Genius", "Simple Genius". Assert this is true.
+        assertEquals(sortByAuthor3.get(0).getTitle(), "Evil Genius");
+        assertEquals(sortByAuthor3.get(1).getTitle(), "Evil Genius");
+        assertEquals(sortByAuthor3.get(2).getTitle(), "Simple Genius");
+        assertEquals(sortByAuthor3.get(3).getAuthor(), "Jon Krakauer");
+
+
+
+    }
 }
