@@ -12,10 +12,10 @@ class LibraryTest {
 
     @Test
     public void testEmpty() {
-        LibraryGeneric lib = new LibraryGeneric();
+        Library lib = new Library();
         assertNull(lib.lookup(978037429279L));
 
-        ArrayList<LibraryBookGeneric> booksCheckedOut = lib.lookup("Jane Doe");
+        ArrayList<LibraryBook> booksCheckedOut = lib.lookup("Jane Doe");
         assertEquals(booksCheckedOut.size(), 0);
 
         assertFalse(lib.checkout(978037429279L, "Jane Doe", 1, 1, 2008));
@@ -27,7 +27,7 @@ class LibraryTest {
     @Test
     public void testNonEmpty() {
 
-        var lib = new LibraryGeneric();
+        var lib = new Library();
         // test a small library
         lib.add(9780374292799L, "Thomas L. Friedman", "The World is Flat");
         lib.add(9780330351690L, "Jon Krakauer", "Into the Wild");
@@ -36,7 +36,7 @@ class LibraryTest {
         assertNull(lib.lookup(9780330351690L)); //not checked out
         var res = lib.checkout(9780330351690L, "Jane Doe", 1, 1, 2008);
         assertTrue(res);
-        ArrayList<LibraryBookGeneric> booksCheckedOut = lib.lookup("Jane Doe");
+        ArrayList<LibraryBook> booksCheckedOut = lib.lookup("Jane Doe");
 
 //        var booksCheckedOut = lib.lookup("Jane Doe");
         assertEquals(booksCheckedOut.size(), 1);
@@ -52,7 +52,7 @@ class LibraryTest {
     @Test
     public void testLargeLibrary(){
         // test a medium library
-        var lib = new LibraryGeneric();
+        var lib = new Library();
         lib.addAll("Mushroom_Publishing.txt");
 
         //CASE; DUPLICATE CHECKOUT
@@ -78,7 +78,7 @@ class LibraryTest {
     @Test
     public void stringLibraryTest() {
         // test a library that uses names (String) to id patrons
-        LibraryGeneric<String> lib = new LibraryGeneric<>();
+        Library<String> lib = new Library<>();
         lib.add(9780374292799L, "Thomas L. Friedman", "The World is Flat");
         lib.add(9780330351690L, "Jon Krakauer", "Into the Wild");
         lib.add(9780446580342L, "David Baldacci", "Simple Genius");
@@ -105,7 +105,7 @@ class LibraryTest {
     @Test
     public void phoneNumberTest(){
         // test a library that uses phone numbers (PhoneNumber) to id patrons
-        var lib = new LibraryGeneric<PhoneNumber>();
+        var lib = new Library<PhoneNumber>();
         lib.add(9780374292799L, "Thomas L. Friedman", "The World is Flat");
         lib.add(9780330351690L, "Jon Krakauer", "Into the Wild");
         lib.add(9780446580342L, "David Baldacci", "Simple Genius");
@@ -115,7 +115,7 @@ class LibraryTest {
         assertTrue(lib.checkout(9780330351690L, patron2, 1, 1, 2008));
         assertTrue(lib.checkout(9780374292799L, patron2, 1, 1, 2008));
 
-        ArrayList<LibraryBookGeneric> booksCheckedOut2 = lib.lookup(patron2);
+        ArrayList<LibraryBook<PhoneNumber>> booksCheckedOut2 = lib.lookup(patron2);
 
         assertEquals(booksCheckedOut2.size(), 2);
         assertTrue(booksCheckedOut2.contains(new Book(9780330351690L, "Jon Krakauer", "Into the Wild")));
@@ -133,7 +133,7 @@ class LibraryTest {
     @Test
     public void testOverDueBookList() {
         // test a medium library
-        var lib = new LibraryGeneric();
+        var lib = new Library();
         lib.addAll("Mushroom_Publishing.txt");
 
         //Have someone check out a books
@@ -144,7 +144,7 @@ class LibraryTest {
         var checkout5 = lib.checkout(9781843190363L, "Jane Doe", 1, 1, 2024);
 
         //create overdue list
-        ArrayList<LibraryBookGeneric> overdueList = lib.getOverdueList(11,1,2022);
+        ArrayList<LibraryBook> overdueList = lib.getOverdueList(11,1,2022);
         //There are 3 overdue books, assert that the size of the list is 3
         assertEquals(overdueList.size(), 3);
 
@@ -153,12 +153,12 @@ class LibraryTest {
     @Test
     public void testInventory() {
         // make a library
-        var lib = new LibraryGeneric();
+        var lib = new Library();
         lib.add(1000, "Thomas L. Friedman", "The World is Flat");
         lib.add(1001, "Jon Krakauer", "Into the Wild");
         lib.add(1002, "David Baldacci", "Simple Genius");
         //create sorted ISBN list
-        ArrayList<LibraryBookGeneric> sortByISBN = lib.getInventoryList();
+        ArrayList<LibraryBook> sortByISBN = lib.getInventoryList();
         //Assert the first ISBN in the list is 1000
         assertEquals(sortByISBN.get(0).getIsbn(), 1000);
 
@@ -168,27 +168,27 @@ class LibraryTest {
     @Test
     public void testOrderByAuthor() {
         // make a library
-        var lib = new LibraryGeneric();
+        var lib = new Library();
         lib.add(1000, "Thomas L. Friedman", "The World is Flat");
         lib.add(1001, "Jon Krakauer", "Into the Wild");
         lib.add(1002, "David Baldacci", "Simple Genius");
         //create sorted author list
-        ArrayList<LibraryBookGeneric> sortByAuthor = lib.getOrderedByAuthor();
+        ArrayList<LibraryBook> sortByAuthor = lib.getOrderedByAuthor();
         //First author is David, assert the first author in the list is David
         assertEquals(sortByAuthor.get(0).getAuthor(), "David Baldacci");
 
         //CASE; SAME AUTHOR, DIFF BOOKS
         //Add book with the same author but Title is alphabetically first
         lib.add(1003, "David Baldacci", "Evil Genius");
-        ArrayList<LibraryBookGeneric> sortByAuthor2 = lib.getOrderedByAuthor();
+        ArrayList<LibraryBook> sortByAuthor2 = lib.getOrderedByAuthor();
         //First book in the list should be "Evil Genius" assert this is true
          assertEquals(sortByAuthor2.get(0).getTitle(), "Evil Genius");
 
          //CASE; DUPLICATE BOOKS
         //Add a repeat book to library
         lib.add(1004, "David Baldacci", "Evil Genius");
-        ArrayList<LibraryBookGeneric> sortByAuthor3 = lib.getOrderedByAuthor();
-        //list should be "Evil Genius", "Evil Genius", "Simple Genius". Assert this is true.
+        ArrayList<LibraryBook> sortByAuthor3 = lib.getOrderedByAuthor();
+        //list should be "Evil Genius", "Evil Genius", "Simple Genius". Assert this is true
         assertEquals(sortByAuthor3.get(0).getTitle(), "Evil Genius");
         assertEquals(sortByAuthor3.get(1).getTitle(), "Evil Genius");
         assertEquals(sortByAuthor3.get(2).getTitle(), "Simple Genius");
@@ -196,5 +196,23 @@ class LibraryTest {
 
 
 
+    }
+    @Test
+    public void testOrderByAuthorComparatorHandlesNulls() {
+        Library<String> library = new Library<>();
+
+        // Create LibraryBookGeneric instances with null authors
+        LibraryBook<String> book1 = new LibraryBook<>(123456789L, null, "Book Title 1");
+        LibraryBook<String> book2 = new LibraryBook<>(987654321L, "John Doe", "Book Title 2");
+
+        ArrayList<LibraryBook<String>> bookList = new ArrayList<>();
+        bookList.add(book1);
+        bookList.add(book2);
+
+        library.addAll(bookList);
+
+        // Test the comparator with a null author book
+        // This should not throw any exceptions
+        library.getOrderedByAuthor();
     }
 }

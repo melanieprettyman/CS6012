@@ -12,13 +12,13 @@ import java.util.Scanner;
  * Class representation of a library (a collection of library books).
  * 
  */
-public class LibraryGeneric<T> {
+public class Library<T> {
 
-  private ArrayList<LibraryBookGeneric<T>> library;
+  private ArrayList<LibraryBook<T>> library;
 
-  public LibraryGeneric() {
+  public Library() {
 
-    library = new ArrayList<LibraryBookGeneric<T>>();
+    library = new ArrayList<LibraryBook<T>>();
   }
 
   /**
@@ -33,7 +33,7 @@ public class LibraryGeneric<T> {
    */
   public void add(long isbn, String author, String title) {
 
-    library.add(new LibraryBookGeneric(isbn, author, title));
+    library.add(new LibraryBook(isbn, author, title));
   }
 
   /**
@@ -42,7 +42,7 @@ public class LibraryGeneric<T> {
    * @param list
    *          -- list of library books to be added
    */
-  public void addAll(ArrayList<LibraryBookGeneric<T>> list) {
+  public void addAll(ArrayList<LibraryBook<T>> list) {
     library.addAll(list);
   }
 
@@ -55,7 +55,7 @@ public class LibraryGeneric<T> {
    * @param filename
    */
   public void addAll(String filename) {
-    ArrayList<LibraryBookGeneric<T>> toBeAdded = new ArrayList<LibraryBookGeneric<T>>();
+    ArrayList<LibraryBook<T>> toBeAdded = new ArrayList<LibraryBook<T>>();
 
     try (Scanner fileIn = new Scanner(new File(filename))) {
 
@@ -81,7 +81,7 @@ public class LibraryGeneric<T> {
             throw new ParseException("Title", lineNum);
           }
           String title = lineIn.next();
-          toBeAdded.add(new LibraryBookGeneric(isbn, author, title));
+          toBeAdded.add(new LibraryBook(isbn, author, title));
         }
         lineNum++;
       }
@@ -97,27 +97,27 @@ public class LibraryGeneric<T> {
     library.addAll(toBeAdded);
   }
 
-
-  public <T> T lookup(long isbn) {
+  //Looks up a book in the library by ISBN.
+  public T lookup(long isbn) {
     //Loop over each library-book in the library-book arraylist
-    for(LibraryBookGeneric book: library){
+    for(LibraryBook<T> book: library){
       //if the library-books ISBN matches the ISBN in question
       if(book.getIsbn() == isbn){
         //return the holder of the library book
-        return (T) book.getHolder();
+        return  book.getHolder();
       }
     }
     //otherwise return null
     return null;
   }
 
-
-  public ArrayList<LibraryBookGeneric> lookup(T holder) {
+//Looks up books in the library by holder.
+  public ArrayList<LibraryBook<T>> lookup(T holder) {
     //Create an arraylist of Library-books, this will contain a list of the holders-books
-    ArrayList<LibraryBookGeneric> holdersBooks = new ArrayList<>();
+    ArrayList<LibraryBook<T>> holdersBooks = new ArrayList<>();
 
     //Loop over each library-book in the library-book arraylist
-    for(LibraryBookGeneric book: library){
+    for(LibraryBook<T> book: library){
       //if the library-books holder matches the holder in question
       if (book.getHolder() != null && book.getHolder().equals(holder) ){
         //add the book to holdersBooks
@@ -129,11 +129,10 @@ public class LibraryGeneric<T> {
 
   }
 
-
-  //if someone want to check out a book (and it's not checkout, return true)
+//Checks out a book from the library by ISBN with the new holder and due date
   public boolean checkout(long isbn, T holder, int month, int day, int year) {
     // Loop over each library-book in the library-book arraylist
-    for (LibraryBookGeneric book : library) {
+    for (LibraryBook<T> book : library) {
       // Check for ISBN
       if (book.getIsbn() == isbn) {
         // If the book is already checked out, return false
@@ -151,10 +150,10 @@ public class LibraryGeneric<T> {
     return false;
   }
 
-
+  //Checks in a book from the library by ISBN
   public boolean checkin(long isbn) {
     //Loop over each library-book in the library-book arraylist
-    for (LibraryBookGeneric book : library) {
+    for (LibraryBook<T> book : library) {
       //check for IBSN matching ISBN in question
       if (book.getHolder() != null && book.getIsbn() == isbn) {
         book.holder = null;
@@ -166,10 +165,10 @@ public class LibraryGeneric<T> {
     return false;
   }
 
-
+  //Checks in a book from the library by holder
   public boolean checkin(T holder) {
     //Loop over each library-book in the library-book arraylist
-    for (LibraryBookGeneric book : library) {
+    for (LibraryBook<T> book : library) {
       //if the book holder is not null (it's not already checked in)
       // and if the books holder is the holder in question
       if (book.getHolder() != null && book.getHolder().equals(holder)) {
@@ -186,36 +185,50 @@ public class LibraryGeneric<T> {
    * Returns the list of library books, sorted by ISBN (smallest ISBN
    first).
    */
-  public ArrayList<LibraryBookGeneric<T>> getInventoryList() {
-    ArrayList<LibraryBookGeneric<T>> libraryCopy = new ArrayList<LibraryBookGeneric<T>>();
+  public ArrayList<LibraryBook<T>> getInventoryList() {
+    ArrayList<LibraryBook<T>> libraryCopy = new ArrayList<LibraryBook<T>>();
     libraryCopy.addAll(library);
     OrderByIsbn comparator = new OrderByIsbn();
     sort(libraryCopy, comparator);
     return libraryCopy;
   }
 
-
-  public ArrayList<LibraryBookGeneric<T>> getOrderedByAuthor() {
-    ArrayList<LibraryBookGeneric<T>> libraryCopy = new ArrayList<LibraryBookGeneric<T>>();
+//Gets the list of library books sorted by author
+  public ArrayList<LibraryBook<T>> getOrderedByAuthor() {
+    // Create a copy of the library to avoid modifying the original
+    ArrayList<LibraryBook<T>> libraryCopy = new ArrayList<LibraryBook<T>>();
     libraryCopy.addAll(library);
+
+    // Create a comparator to sort by author and then by title
     OrderByAuthor comparator = new OrderByAuthor();
+
+    // Sort the copied library and return the sorted list
     sort(libraryCopy, comparator);
     return libraryCopy;
   }
 
 
+ //Gets the list of overdue books based on the specified date.
+  public ArrayList<LibraryBook<T>> getOverdueList(int month, int day, int year) {
 
-  public ArrayList<LibraryBookGeneric<T>> getOverdueList(int month, int day, int year) {
+    // Create a date to check against
     GregorianCalendar dueDate = new GregorianCalendar(year, month, day);
-    ArrayList<LibraryBookGeneric<T>> overDueList = new ArrayList<LibraryBookGeneric<T>>();
-    //Loop over each library-book in the library-book arraylist
-    for (LibraryBookGeneric book : library) {
-      int res = book.getDueDate().compareTo(dueDate);
-      if(res<0){
-        overDueList.add(book);
+
+    // Initialize a list to hold overdue books
+    ArrayList<LibraryBook<T>> overDueList = new ArrayList<LibraryBook<T>>();
+
+    // Loop through each book in the library to identify overdue books
+    for (LibraryBook<T> book : library) {
+      if(book.getDueDate()!= null) {
+        int res = book.getDueDate().compareTo(dueDate);
+        if (res < 0) {
+          overDueList.add(book);
+        }
       }
     }
+    // Create a comparator for sorting by due date
     OrderByDueDate comparator = new OrderByDueDate();
+    // Sort the list of overdue books by the due date and return it
     sort(overDueList, comparator);
     return overDueList;
   }
@@ -243,36 +256,51 @@ public class LibraryGeneric<T> {
    * Comparator that defines an ordering among library books using the
    ISBN.
    */
-  protected class OrderByIsbn implements Comparator<LibraryBookGeneric<T>> {
+  protected class OrderByIsbn implements Comparator<LibraryBook<T>> {
     /**
      * Returns a negative value if lhs is smaller than rhs. Returns a positive
      * value if lhs is larger than rhs. Returns 0 if lhs 	and rhs are equal.
      */
-    public int compare(LibraryBookGeneric<T> lhs, LibraryBookGeneric<T> rhs) {
+    public int compare(LibraryBook<T> lhs, LibraryBook<T> rhs) {
       return (int) (lhs.getIsbn() - rhs.getIsbn());
     }
   }
 
 
-  protected class OrderByAuthor implements Comparator<LibraryBookGeneric<T>> {
+
+  protected class OrderByAuthor implements Comparator<LibraryBook<T>> {
     @Override
-    public int compare(LibraryBookGeneric<T> o1, LibraryBookGeneric<T> o2) {
-        int author = ( o1.getAuthor().compareTo(o2.getAuthor()));
-        if(author == 0){
-         int title = (o1.getTitle().compareTo(o2.getTitle()));
-         return title;
+    public int compare(LibraryBook<T> o1, LibraryBook<T> o2) {
+      String author1 = o1.getAuthor();
+      String author2 = o2.getAuthor();
+
+      if (author1 == null && author2 == null) {
+        return 0; // Both authors are null, consider them equal
+      } else if (author1 == null) {
+        return -1; // o1's author is null, place it before o2
+      } else if (author2 == null) {
+        return 1; // o2's author is null, place it before o1
+      } else {
+        // Both authors are not null, compare them
+        int authorComparison = author1.compareTo(author2);
+        if (authorComparison == 0) {
+          // Authors are the same, compare by title
+          return o1.getTitle().compareTo(o2.getTitle());
+        } else {
+          return authorComparison;
         }
-      return author;
       }
+    }
   }
 
-
-  protected class OrderByDueDate implements Comparator<LibraryBookGeneric<T>> {
+  //Comparator that defines an ordering among library books using the due date.
+  protected class OrderByDueDate implements Comparator<LibraryBook<T>> {
     @Override
-    public int compare(LibraryBookGeneric<T> o1, LibraryBookGeneric<T> o2) {
+    public int compare(LibraryBook<T> o1, LibraryBook<T> o2) {
+      //Cast the objects due-dates to GregorianCalendar
       GregorianCalendar dueDate1 = o1.getDueDate();
       GregorianCalendar dueDate2 = o2.getDueDate();
-
+      // Comparing by due date
       return (int) (dueDate1.compareTo(dueDate2));
     }
   }

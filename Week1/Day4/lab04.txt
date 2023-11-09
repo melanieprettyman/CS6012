@@ -1,0 +1,33 @@
+﻿1. Which two binarySearch tests are failing?
+if(Part1.binarySearch(arr1, 0) == true) and if(Part1.binarySearch(arr2, 20) == false)
+
+
+2. What are the values of arr and goal passed in to binary search?
+arr=[1,2,3,4,5]
+goal=0
+3. For each of the two cases of binarySearch that are failing, which return statements are they executing in error (is it returning true when it should be returning false, or the other way around)?
+First case the binary search is returning true but it should be returning false. 
+Second case in the binary search is return false, but it should be returning true. 
+
+
+4. What is the bug in binarySearch? How do you fix it?
+Binary search was comparing the int index’s in the array, not the values at the index’s in the array. 
+
+
+5. Which loops appear to be inifinite?
+Loops 2 and 4 
+
+
+6. For the loops that you found to be infinite, briefly explain why they are never progressing.
+In loop-2 B is set to zero before loop and the value of B is never changed so it will always be less than 10, never fulfilling the end condition. 
+In loop-4 the value of f alternated between being 5 and 6 during every run. The end condition of being less than zero is never fulfilled. 
+
+
+7. What does the call to password.split(" ") appear to do? Hint: examine the input value of "password", then examine the items in the "tokens" array returned by the call.
+
+
+Splits the password into tokens using a space as the delimiter.
+
+
+8. What is the correct password?
+        1,4,9,16,25
