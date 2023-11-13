@@ -1,0 +1,37 @@
+﻿Partner: Aiden Pratt
+Repo: AP-6012 Week2/Day1
+
+
+1. What activities did you do as the driver? What activities did you do as the navigator?
+As the driver you are implementing the logic, and executing the instructions given by the navigator. You are responsible for translating the high-level design and requirements into actual code. Additionally, you should communicate your thought process and seek clarification from the navigator when needed.
+
+
+On the other hand, as the navigator, your primary activities involve reviewing the code written by the driver, providing feedback, and suggesting improvements. You should actively engage in discussions, ask questions, and offer alternative solutions. The navigator's role is to ensure the code is of high quality, follows best practices, and aligns with the overall project goals.
+
+
+2. What are the advantages and disadvantages of serving in each role?
+Driver; 
+-Pros: the driver, you have the opportunity to actively engage in coding and gain hands-on experience.
+-Cons: the driver may sometimes feel pressured to produce code quickly, leading to potential mistakes or overlooking certain aspects.
+
+
+Navigator; 
+-Pros: allows you to analyze the code critically, identify potential issues, and suggest improvements. It also provides an opportunity to enhance your communication and mentoring skills.
+-Cons:the navigator may sometimes struggle to keep up with the driver's pace or find it challenging to express ideas effectively.
+
+
+3. How often did you and your partner switch roles? Did you switch often enough?
+We switched roles twice, and since there were only two methods I felt like this was enough for this project. 
+
+
+4. Which is your preferred role and why?
+I preferred being the navigator and coming up with the code logic. I felt like this role had more creativity and control. 
+
+
+5. Explain why this is a BAD test case for your method: assertEquals("bird", MedianSolver.median(new String[]{"bird", "cat", "dog", "ant"}))
+This is a bad test case because there is no clear median. The median could be bird or cat because this is an even list. 
+
+
+6. Explain how you could change the test to make it "valid" and explain how you could change the specification so that this is considered a "good" test. 
+
+Instead of expecting a specific median value, we can modify the test to check if the returned median is one of the middle elements in the sorted list. For example, we can use the assertion assertTrue(Arrays.asList("bird", "cat").contains(MedianSolver.median(new String[]{"bird", "cat", "dog", "ant", "elephant"}))).
