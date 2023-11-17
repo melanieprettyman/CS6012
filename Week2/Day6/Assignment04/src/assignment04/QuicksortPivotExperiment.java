@@ -11,7 +11,7 @@ import static assignment04.SortUtil.*;
 
 public class QuicksortPivotExperiment {
     public static void main(String[] args) {
-        try (FileWriter fw = new FileWriter(new File("RANDOM_PIVOT_test.tsv"))) {
+        //try (FileWriter fw = new FileWriter(new File("RANDOM_PIVOT_test.tsv"))) {
 
             int[] inputSizes = {1000, 5000, 10000, 50000, 100000}; // Example input sizes
 
@@ -27,14 +27,14 @@ public class QuicksortPivotExperiment {
 
                 long runningTime = endTime - startTime;
                 System.out.println("Input Size: " + size + ", Running Time: " + runningTime + " ns");
-                fw.write( size + "\t" + runningTime + "\n"); // write to file.
+                //fw.write( size + "\t" + runningTime + "\n"); // write to file.
 
             }
             System.out.println();
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
 
 
     }

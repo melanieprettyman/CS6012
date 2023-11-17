@@ -39,10 +39,11 @@ public class SortUtil<T> {
 //        if (end - start <= 2) {
 //            return;
 //        }
-        threshold_ = 6;
+        threshold_ = 500;
 
         //if the array length is less than the threshold, do insertion sort
         if(end - start <= threshold_){
+            //needs start end, to only sort smaller array
             insertionSort(array, comparator);
         } else { //merge-sort
             //Get the middle index
@@ -73,6 +74,7 @@ public class SortUtil<T> {
         T[] leftArray = (T[]) new Comparable[middle - start + 1];
         T[] rightArray = (T[]) new Comparable[end - middle];
 
+        //TODO; Put copy [] in driver, n/2 size so its always safe and not make a ton of copies
         //Copy into temp arrays
         for (int i = 0; i < leftArray.length; i++) {
             leftArray[i] = array.get(start + i);
@@ -156,7 +158,6 @@ public class SortUtil<T> {
      */
     public static <T> void quicksort(ArrayList<T> arrayList, Comparator<? super T> comparator) {
         int start = 0;
-        //int end = arrayList.size() - 1;
         int end = arrayList.size() -1;
         quicksortRecurse(arrayList, start, end, comparator);
     }

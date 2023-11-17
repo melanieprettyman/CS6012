@@ -11,7 +11,7 @@ import static assignment04.SortUtil.*;
 public class MergeSortThresholdExperiment {
     public static void main(String[] args) {
 
-            try (FileWriter fw = new FileWriter(new File("threshold_test.tsv"))) {
+            //try (FileWriter fw = new FileWriter(new File("threshold_test.tsv"))) {
 
                 int[] inputSizes = {1000, 5000, 10000, 50000, 100000}; // Example input sizes
                 int[] thresholdValues = {0, 10, 500, 1000, 5000, 50000, 100000}; // Example threshold values
@@ -30,7 +30,7 @@ public class MergeSortThresholdExperiment {
                         long runningTime = endTime - startTime;
                         System.out.println("Threshold: " + threshold + "size: " + size + ", Running Time: " + runningTime + " ns");
 
-                        fw.write(threshold + "\t" + size + "\t" + runningTime + "\n"); // write to file.
+                        //fw.write(threshold + "\t" + size + "\t" + runningTime + "\n"); // write to file.
 
                     }
                     System.out.println();
@@ -38,8 +38,8 @@ public class MergeSortThresholdExperiment {
 
                 }
 
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
         }
     }
