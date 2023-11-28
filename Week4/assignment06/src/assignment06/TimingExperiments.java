@@ -8,7 +8,7 @@ import java.util.List;
 public class TimingExperiments {
         public static void main(String[] args) throws IOException {
 
-            for(int N = 100; N <= 4000; N+= 200){
+            for(int N = 100; N <= 10000; N+= 200){
                 //creating a bst for each N in the range, going up by 100000
                 BinarySearchTree<Integer> bstSorted = new BinarySearchTree<>();
                 BinarySearchTree<Integer> bstRandom = new BinarySearchTree<>();
@@ -25,7 +25,7 @@ public class TimingExperiments {
                 long endtimeSorted = System.nanoTime();
                 long timeTakenSorted = endtimeSorted - startTimeSorted;
 
-                System.out.println(N + "\t" + timeTakenSorted);
+                //System.out.println(N + "\t" + timeTakenSorted);
 
                 //RANDOM---
 

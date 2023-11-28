@@ -11,8 +11,8 @@ import java.util.TreeSet;
 public class TimingExperiments2 {
         public static void main(String[] args) throws IOException {
 
-            for(int N = 100; N <= 4000; N+= 200){
-                //creating a bst for each N in the range, going up by 100000
+            for(int N = 100; N <= 10000; N+= 200){
+                //creating a bst for each N in the range, going up by 10000
                 BinarySearchTree<Integer> BST = new BinarySearchTree<>();
                 TreeSet<Integer> treeSet = new TreeSet<>();
 
