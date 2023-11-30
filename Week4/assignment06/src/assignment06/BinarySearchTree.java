@@ -382,38 +382,6 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Sorted
     public int getHeight(){
     return root_.height;
     }
-    // Driver method
-    // Generates a .dot file representing this tree.
-    // Use each node's hashCode to uniquely identify it
-    public void writeDot(String filename) {
-        try {
-            PrintWriter output = new PrintWriter(new FileWriter(filename));
-            output.println("graph g {");
-            if (root_ != null)
-                output.println(root_.hashCode() + "[label=\"" + root_ + "\"]");
-            writeDotRecursive(root_, output);
-            output.println("}");
-            output.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
-    // Recursively traverse the tree, outputting each node to the .dot file
-    private void writeDotRecursive(Node n, PrintWriter output) throws Exception {
-        if (n == null)
-            return;
-        if (n.left != null) {
-            output.println(n.left.hashCode() + "[label=\"" + n.left + "\"]");
-            output.println(n.hashCode() + " -- " + n.left.hashCode());
-        }
-        if (n.right != null) {
-            output.println(n.right.hashCode() + "[label=\"" + n.right + "\"]");
-            output.println(n.hashCode() + " -- " + n.right.hashCode());
-        }
-
-        writeDotRecursive(n.left, output);
-        writeDotRecursive(n.right, output);
-    }
 
 }

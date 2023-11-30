@@ -121,20 +121,6 @@ class BinarySearchTreeTest {
 
     }
 
-//    @Test
-//    public void testBalancedVsUnbalancedTrees() {
-//        BinarySearchTree<Integer> balancedTree = new BinarySearchTree<>();
-//        BinarySearchTree<Integer> unbalancedTree = new BinarySearchTree<>();
-//
-//        // Test balanced tree scenario
-//        assertTrue(balancedTree.addAll(List.of(5, 3, 7, 2, 4, 6, 8)));
-//        assertEquals(2, balancedTree.getHeight()); // Check the height for a balanced tree
-//
-//        // Test unbalanced tree scenario
-//        assertTrue(unbalancedTree.addAll(List.of(1, 2, 3, 4, 5)));
-//        assertTrue(unbalancedTree.remove(5)); // Remove to balance the tree
-//        assertEquals(3, unbalancedTree.getHeight()); // Check the height for an unbalanced tree
-//    }
 
     @Test
     public void testAddingElementsAtBoundaries() {
