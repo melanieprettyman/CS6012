@@ -160,55 +160,58 @@ public class SinglyLinkedList<E> implements List<E> {
      * @return the element at the position
      * @throws IndexOutOfBoundsException if index is out of range (index < 0 || index >= size())
      */
-//    @Override
-//    public E delete(int index) throws IndexOutOfBoundsException {
-//        if (isEmpty()) {
-//            throw new NoSuchElementException("List is empty");
-//        }
-//        //check if the index is out of bounds
-//        if (index < 0 || index >= size) {
-//            throw new IndexOutOfBoundsException("Index out of bounds");
-//        }
-//        Node<E> prevNode = getPreviousNode(index);
-//        var node = getNode(index);
-//        //set previous node to the node after the delete-node
-//        prevNode.next = prevNode.next.next;
-//        //update size
-//        size--;
-//        //return deleted element
-//        return node.data;
-//    }
     @Override
     public E delete(int index) throws IndexOutOfBoundsException {
-        if (head == null || index < 0 || index >= size) {
-            return null;
+        if (isEmpty()) {
+            throw new NoSuchElementException("List is empty");
         }
-
-        Node temp = head;
-        E deletedValue = null;
-        if (index == 0) {
-            head = temp.next;
-            //Update deleted value
-            deletedValue = (E) temp.data;
-        } else {
-            for (int i = 0; temp != null && i < index - 1; i++) {
-                temp = temp.next;
-            }
-
-            if (temp == null || temp.next == null) {
-                return null;
-            }
-
-            Node nextNode = temp.next.next;
-            //Save this.
-            deletedValue = (E) temp.next.data;
-            //Unlink deleted node from list.
-            temp.next = nextNode;
+        //check if the index is out of bounds
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index out of bounds");
         }
-
+        if(index ==0){
+            return deleteFirst();
+        }
+        Node<E> prevNode = getPreviousNode(index);
+        var node = getNode(index);
+        //set previous node to the node after the delete-node
+        prevNode.next = prevNode.next.next;
+        //update size
         size--;
-        return deletedValue;
+        //return deleted element
+        return node.data;
     }
+//    @Override
+//    public E delete(int index) throws IndexOutOfBoundsException {
+//        if (head == null || index < 0 || index >= size) {
+//            return null;
+//        }
+//
+//        Node temp = head;
+//        E deletedValue = null;
+//        if (index == 0) {
+//            head = temp.next;
+//            //Update deleted value
+//            deletedValue = (E) temp.data;
+//        } else {
+//            for (int i = 0; temp != null && i < index - 1; i++) {
+//                temp = temp.next;
+//            }
+//
+//            if (temp == null || temp.next == null) {
+//                return null;
+//            }
+//
+//            Node nextNode = temp.next.next;
+//            //Save this.
+//            deletedValue = (E) temp.next.data;
+//            //Unlink deleted node from list.
+//            temp.next = nextNode;
+//        }
+//
+//        size--;
+//        return deletedValue;
+//    }
     /**
      * Determines the index of the first occurrence of the specified element in the list,
      * or -1 if this list does not contain the element.
@@ -248,7 +251,7 @@ public class SinglyLinkedList<E> implements List<E> {
      */
     @Override
     public boolean isEmpty() {
-        return head == null; //if head equals null, return true
+        return size == 0; //if head equals null, return true
     }
 
     /**
@@ -306,60 +309,69 @@ public class SinglyLinkedList<E> implements List<E> {
      */
     @Override
     public Iterator iterator() {
-        return new myIterator(); //calls custom constructor
+        return new myIterator(); // Instantiates a custom iterator
     }
 
+    // Custom Iterator class implementing the Iterator interface
     public class myIterator implements Iterator<E> {
-        Node<E> current;
-        private Node<E> previous;
+        Node<E> current; // Reference to the current Node
+        private Node<E> previous; // Reference to the previous Node
 
-        Boolean canRemove;
+        Boolean canRemove; // Flag indicating if removal is permitted
 
+        // Constructor for the custom iterator
         public myIterator() {
-            current = head;
-            previous = null;
-            canRemove = false;
+            current = head; // Sets the iterator's current to the head of the list
+            previous = null; // Initializes previous to null
+            canRemove = false; // Initially, removal is not permitted
         }
 
+        // Checks if there is another element in the list
         @Override
         public boolean hasNext() {
-            return current != null;
+            return current != null; // Returns true if there is another element
         }
 
+        // Retrieves the next element in the iteration
         @Override
         public E next() {
             if (!hasNext()) {
                 throw new NoSuchElementException("No more elements exist in the list");
             }
-            E value = current.data;
-            previous = current;
-            current = current.next;
-            canRemove = true;
-            return value;
+            E value = current.data; // Retrieves the data of the current Node
+            //prevofprev = prev
+            previous = current; // Updates the previous Node
+            current = current.next; // Moves the iterator to the next Node
+            canRemove = true; // Marks the element for removal
+            return value; // Returns the data of the current Node
         }
 
+        // Removes the last element returned by next()
         @Override
         public void remove() {
             if (!canRemove) {
                 throw new IllegalStateException("No more elements to iterate over");
             }
 
-            if (previous == null) {
-                //Removing the first element.
-                head = head.next;
-                current = head;
-            } else {
-                //Removing a non-first element.
+            if (previous == null) { //~~prevofprev ==null
+                        //~~head=current
+                // Removing the first element.
+                head = head.next; // Moves the head to the next Node
+                current = head; // Updates the iterator's current
+            } else { //~~prevofprev.next = cuurent
+                // Removing a non-first element.
                 if (current != null) {
-                    previous.next = current.next;
-                    current = previous.next;
+                    previous.next = current.next; // Removes the current Node from the list
+                    current = previous.next; // Moves the iterator to the next Node
                 } else {
-                    //If there is no next element, set current to null.
+                    // If there is no next element, set current to null.
                     current = null;
                 }
             }
-            canRemove = false;
-            --size;
+            //~~prev = null
+            canRemove = false; // Resets the removal flag
+            --size; // Decrements the size of the list
         }
     }
+
 }

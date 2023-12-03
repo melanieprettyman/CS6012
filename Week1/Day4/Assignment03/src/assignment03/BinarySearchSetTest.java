@@ -141,14 +141,14 @@ class BinarySearchSetTest {
 
     @Test
     void toArray() {
-//        //CASE: UTILITY
-//        // Call the toArray() method
-//        Integer[] result = integerSet.toArray();
-//        // Create an expected array with the elements in sorted order
-//        Integer[] expected = {1,2,5,7,8,};
-//
-//        // Assert that the result array is equal to the expected array
-//        assertArrayEquals(expected, result);
+        //CASE: UTILITY
+        // Call the toArray() method
+        Object[] result = integerSet.toArray();
+        // Create an expected array with the elements in sorted order
+        Object[] expected = {1,2,5,7,8,};
+
+        // Assert that the result array is equal to the expected array
+        assertArrayEquals(expected, result);
     }
 
     //ITERATOR AND CONTAINS ALL

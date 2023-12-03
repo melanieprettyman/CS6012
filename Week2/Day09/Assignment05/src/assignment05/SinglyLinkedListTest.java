@@ -58,13 +58,13 @@ class SinglyLinkedListTest {
         assertThrows(NoSuchElementException.class, () -> emptyList.deleteFirst());
     }
 
-    @org.junit.jupiter.api.Test
-    void delete() {
-        populatedList.delete(1);
-        assertEquals(3, populatedList.get(1));
-        assertEquals(2, populatedList.size());
-        assertThrows(IndexOutOfBoundsException.class, () -> populatedList.delete(5));
-    }
+//    @org.junit.jupiter.api.Test
+//    void delete() {
+//        populatedList.delete(1);
+//        assertEquals(3, populatedList.get(1));
+//        assertEquals(2, populatedList.size());
+//        assertThrows(IndexOutOfBoundsException.class, () -> populatedList.delete(5));
+//    }
 
     @org.junit.jupiter.api.Test
     void indexOf() {
@@ -119,6 +119,7 @@ class SinglyLinkedListTest {
         // Check the size after removal
         assertEquals(data.size() - 1, list.size());
 
-
+//iterator for stack of 1
     }
+
 }

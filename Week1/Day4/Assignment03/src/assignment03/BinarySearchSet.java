@@ -70,8 +70,8 @@ public class BinarySearchSet<E> implements SortedSet<E>{
             boolean added = false;
 
             //If set is null, create an array set add element to set
-            if (set_ == null) {
-                set_ = (E[]) new Object[1];
+            if (this.isEmpty()) {
+                //set_ = (E[]) new Object[1];
                 set_[0] = element;
                 size_ = 1;
                 added = true;
@@ -211,8 +211,7 @@ public class BinarySearchSet<E> implements SortedSet<E>{
     @Override
         public E[] toArray() {
         // Create a new array to avoid modifying the internal set_
-//        return Arrays.copyOf(set_, size_);
-        return Arrays.copyOf(set_, size_, (Class<? extends E[]>) set_.getClass());
+        return Arrays.copyOf(set_, size_);
         }
 
     //---------------------------------//
@@ -320,16 +319,28 @@ private int binarySearch(E element) {
         //return "next" element and "advance" the iterator
         @Override
         public E next() {
+            //check if has next is true
+            if(!hasNext()){
+                throw new NoSuchElementException();
+            }
             E obj = get(position);
             position++;
             return  obj;
         }
         //REMOVE
-        //remove the element that the most recent call to next returned
+        //-remove the element that the most recent call to next returned
         @Override
         public void remove() {
-            E obj = get(position);
+            // check if user called next, throw exception
+            if (position == 0) {
+                throw new IllegalStateException("next method has not been called");
+            }
+            //get the element that was most recently returned by the next()
+            E obj = get(position - 1);
+            //remove element
             BinarySearchSet.this.remove(obj);
+            //position is decremented so that the iterator is correctly positioned after the removal of the element
+            position--;
         }
 
     }
